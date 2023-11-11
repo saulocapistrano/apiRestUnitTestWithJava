@@ -3,6 +3,7 @@ package com.ifinit.apiresttestes.services.impl;
 import com.ifinit.apiresttestes.domain.User;
 import com.ifinit.apiresttestes.domain.dto.UserDTO;
 import com.ifinit.apiresttestes.repositories.UserRepository;
+import com.ifinit.apiresttestes.services.exceptions.DataIntegratyViolationException;
 import com.ifinit.apiresttestes.services.exceptions.ObjectNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,6 +20,7 @@ import java.util.Optional;
 import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
@@ -98,6 +100,22 @@ class UserServiceImplTest {
          assertEquals(NAME, response.getName());
          assertEquals(MAIL, response.getMail());
          assertEquals(PASSWORD, response.getPassword());
+
+    }
+
+    @Test
+    void whenCreateThenReturnAnDataIntegrityViolationException() {
+        when(repository.findByMail(anyString())).thenReturn(optionalUser);
+
+        try{
+            optionalUser.get().setId(2);
+            service.create(userDTO);
+        } catch (Exception ex){
+            assertEquals(DataIntegratyViolationException.class, ex.getClass());
+
+            assertEquals( "This email is already registered in the system.", ex.getMessage());
+        }
+
 
     }
 
