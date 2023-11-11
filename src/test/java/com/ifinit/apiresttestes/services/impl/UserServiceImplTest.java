@@ -3,6 +3,7 @@ package com.ifinit.apiresttestes.services.impl;
 import com.ifinit.apiresttestes.domain.User;
 import com.ifinit.apiresttestes.domain.dto.UserDTO;
 import com.ifinit.apiresttestes.repositories.UserRepository;
+import com.ifinit.apiresttestes.services.exceptions.ObjectNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -21,7 +22,7 @@ import static org.mockito.Mockito.when;
 @SpringBootTest
 class UserServiceImplTest {
 
-    public static final int ID = 1;
+    public static final Integer ID = 1;
     public static final String NAME = "Saulo";
     public static final String MAIL = "saulo@mail.com";
     public static final String PASSWORD = "123";
@@ -53,6 +54,17 @@ class UserServiceImplTest {
         assertEquals(MAIL, response.getMail());
         assertEquals(PASSWORD, response.getPassword());
 
+    }
+    @Test
+    void whenFindByIdThenReturnObjectNotFoundException(){
+    when(repository.findById(Mockito.anyInt())).thenThrow(new ObjectNotFoundException("Object not found."));
+    try {
+        service.findById(ID);
+    }catch (Exception ex){
+        assertEquals(ObjectNotFoundException.class,
+                ex.getClass());
+        assertEquals("Object not found.", ex.getMessage());
+    }
     }
 
     @Test
