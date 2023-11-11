@@ -32,6 +32,7 @@ class UserServiceImplTest {
     public static final String PASSWORD = "123";
     public static final int INDEX = 0;
     public static final String OBJECT_NOT_FOUND = "Object not found.";
+    public static final String THIS_EMAIL_IS_ALREADY_REGISTERED_IN_THE_SYSTEM = "This email is already registered in the system.";
     @InjectMocks
     private UserServiceImpl service;
     @Mock
@@ -113,7 +114,7 @@ class UserServiceImplTest {
         } catch (Exception ex){
             assertEquals(DataIntegratyViolationException.class, ex.getClass());
 
-            assertEquals( "This email is already registered in the system.", ex.getMessage());
+            assertEquals(THIS_EMAIL_IS_ALREADY_REGISTERED_IN_THE_SYSTEM, ex.getMessage());
         }
 
 
@@ -131,6 +132,23 @@ class UserServiceImplTest {
         assertEquals(NAME, response.getName());
         assertEquals(MAIL, response.getMail());
         assertEquals(PASSWORD, response.getPassword());
+
+    }
+
+
+    @Test
+    void whenUpdateThenReturnAnDataIntegrityViolationException() {
+        when(repository.findByMail(anyString())).thenReturn(optionalUser);
+
+        try{
+            optionalUser.get().setId(2);
+            service.update(userDTO);
+        } catch (Exception ex){
+            assertEquals(DataIntegratyViolationException.class, ex.getClass());
+
+            assertEquals(THIS_EMAIL_IS_ALREADY_REGISTERED_IN_THE_SYSTEM, ex.getMessage());
+        }
+
 
     }
 
