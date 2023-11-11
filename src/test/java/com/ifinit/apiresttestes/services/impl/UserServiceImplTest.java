@@ -19,9 +19,8 @@ import java.util.Optional;
 
 import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest
 class UserServiceImplTest {
@@ -149,11 +148,16 @@ class UserServiceImplTest {
             assertEquals(THIS_EMAIL_IS_ALREADY_REGISTERED_IN_THE_SYSTEM, ex.getMessage());
         }
 
-
     }
 
     @Test
-    void delete() {
+    void whenDeleteUserWhithSuccess() {
+    when(repository.findById(anyInt())).thenReturn(optionalUser);
+    doNothing().when(repository).deleteById(anyInt());
+    service.delete(ID);
+    verify(repository, times(1)).deleteById(anyInt());
+
+
     }
 
     private void startUser(){
