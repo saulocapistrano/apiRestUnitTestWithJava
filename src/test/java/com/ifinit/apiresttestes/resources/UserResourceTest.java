@@ -6,24 +6,30 @@ import com.ifinit.apiresttestes.services.impl.UserServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 class UserResourceTest {
 
-    private static final Integer ID = 1;
-    private static final String NAME = "Saulo";
-    private static final String MAIL = "saulo@mail.com";
-    private static final String PASSWORD = "123";
+    public static final Integer ID = 1;
+    public static final String NAME = "Saulo";
+    public static final String MAIL = "saulo@mail.com";
+    public static final String PASSWORD = "123";
 
-    private  User user;
+
+    private User user;
     private UserDTO userDTO;
     @InjectMocks
     private UserResource resource;
 
+    @Mock
     private UserServiceImpl service;
 
+    @Mock
     private ModelMapper mapper;
 
 
@@ -31,10 +37,14 @@ class UserResourceTest {
     void setUp() {
         MockitoAnnotations.openMocks(this);
         startUser();
+
     }
 
     @Test
-    void findById() {
+    void thenFindByIdWhenReturnSuccess() {
+
+
+
     }
 
     @Test
@@ -53,7 +63,7 @@ class UserResourceTest {
     void delete() {
     }
 
-    private void startUser(){
+    private void startUser() {
         user = new User(ID, NAME, MAIL, PASSWORD);
         userDTO = new UserDTO(ID, NAME, MAIL, PASSWORD);
 
