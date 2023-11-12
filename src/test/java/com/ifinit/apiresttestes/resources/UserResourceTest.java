@@ -93,13 +93,25 @@ class UserResourceTest {
 
     }
 
+
+
+    @Test
+    void whenCreateThenReturnCreated() {
+    when(service.create(any())).thenReturn(user);
+
+        ResponseEntity<List<UserDTO>> response = resource.create(userDTO);
+
+        Assertions.assertEquals(ResponseEntity.class, response.getClass());
+        Assertions.assertEquals(HttpStatus.CREATED, response.getStatusCode());
+        Assertions.assertNotNull(response.getHeaders().get("Location"));
+
+
+    }
+
     @Test
     void update() {
     }
 
-    @Test
-    void create() {
-    }
 
     @Test
     void delete() {
